@@ -86,7 +86,7 @@ public class School {
         encounterObject();
         prinText("\n\nYou continue walking and encounter a new teacher.");
         Teacher newTeacher = new Teacher("Mr. Hager", 6, 2, 2);
-
+        boolean complete = false;
         while (true) {
             prinText("\n\nWhat do you want to do?");
             prinText("\n    1. Make an excuse ");
@@ -103,20 +103,19 @@ public class School {
                     student.makeExcuse(newTeacher.getHealth(), newTeacher.getAttack(), newTeacher.getDefeatReward());
                     break;
                 case 2:
-                    boolean complete = false;
-                    useObject(complete);
-                    if (complete) {
-                        break;
-                    }
+                    complete = useObject(complete);
+                    break;
                 case 3:
                     student.runAway(2);
                     break;
             }
-            break;
+            if (complete) {
+                break;
+            }
         }
     }
 
-    public static void useObject(boolean complete) {
+    public static boolean useObject(boolean complete) {
         while (true) {
             // Display objects in backpack
             prinText("\nChoose an object to use:");
@@ -127,15 +126,15 @@ public class School {
                 index++;
             }
 
-            String choice = scanner.nextLine();
-            int input = checkInput(choice, 0, randomObjects.size());
-            if (input < 0 || input > student.backpack.size()) {
+            String choiceTwo = scanner.nextLine();
+            int inputTwo = checkInput(choiceTwo, 0, randomObjects.size());
+            System.out.println(inputTwo);
+            if (inputTwo < 0 || inputTwo > student.backpack.size()) {
                 prinText("Invalid choice. Please enter a number between 0 and " + student.backpack.size());
-            } else if (input == 0) {
-                complete = false;
-                break;
+            } else if (inputTwo == 0) {
+                return false;
             } else {
-                Object selectedObject = student.backpack.get(input - 1);
+                Object selectedObject = student.backpack.get(inputTwo - 1);
                 if (selectedObject.getName().equalsIgnoreCase("ID Card")) {
                     prinText("\nYou can't use the ID card here. Please pick another object.");
                     useObject(complete);
@@ -217,7 +216,7 @@ public class School {
         for (int i = 0; i < text.length(); i++) {
             System.out.print(text.charAt(i));
             try {
-                Thread.sleep(0);
+                Thread.sleep(60);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
