@@ -1,3 +1,10 @@
+
+/*
+
+    Title: Student Class 
+    Authors:  Hassan Darky
+
+*/
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -6,7 +13,7 @@ public class Student {
     private String name;
     private int strikes;
     private int excuseLevel;
-    private ArrayList<Object> backpack;
+    public ArrayList<Object> backpack;
 
     // CONSTRUCTOR
 
@@ -45,7 +52,6 @@ public class Student {
     public void makeExcuse(int chanceNumber, int striken, int defeatReward) {
         Random rand = new Random();
         int chance = rand.nextInt(chanceNumber) + 1;
-        System.out.println(chance);
         if (chance > getExcuseLevel()) {
             loseStrkes(striken);
             printText("\nYour excuse fails. You lose a " + striken + " strike. You have "
@@ -53,7 +59,7 @@ public class Student {
 
         } else if (chance < getExcuseLevel()) {
             gainExcuseLevel(defeatReward);
-            printText("\nYour excuse works! You're allowed to enter. Additionaly your excuse level increased to "
+            printText("\nYour excuse works! You're allowed to continue. Additionaly your excuse level increased to "
                     + getExcuseLevel());
 
         }
@@ -72,8 +78,9 @@ public class Student {
     public void searchBackpack(int attack, int defeatReward) {
         if (checkBackpack("ID Card")) {
             gainExcuseLevel(defeatReward);
-            printText("\nYou found your ID card! You're allowed to enter. Additionaly your excuse level increased to "
-                    + getExcuseLevel());
+            printText(
+                    "\nYou found your ID card! You're allowed to continue. Additionaly your excuse level increased to "
+                            + getExcuseLevel());
 
         } else {
             loseStrkes(attack);

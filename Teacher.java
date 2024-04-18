@@ -1,3 +1,9 @@
+/*
+
+    Title: Teacher Class 
+    Authors:  Hassan Darky
+
+*/
 public class Teacher {
 
     private String name;
