@@ -88,6 +88,7 @@ public class School {
         Teacher newTeacher = new Teacher("Mr. Hager", 6, 2, 2);
         boolean complete = false;
         while (true) {
+
             prinText("\n\nWhat do you want to do?");
             prinText("\n    1. Make an excuse ");
             prinText("\n    2. Use an Object ");
