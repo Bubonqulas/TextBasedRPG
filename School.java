@@ -103,48 +103,55 @@ public class School {
                     student.makeExcuse(newTeacher.getHealth(), newTeacher.getAttack(), newTeacher.getDefeatReward());
                     break;
                 case 2:
-                    useObject();
-                    break;
+                    boolean complete = false;
+                    useObject(complete);
+                    if (complete) {
+                        break;
+                    }
                 case 3:
                     student.runAway(2);
                     break;
             }
             break;
         }
-        scanner.close();
     }
 
-    public static void useObject() {
-        // Display objects in backpack
-        prinText("\nChoose an object to use:");
-        int index = 1;
-        prinText("\n    0. Go back ");
-        for (Object obj : student.backpack) {
-            prinText("\n    " + index + ". " + obj.getName());
-            index++;
-        }
+    public static void useObject(boolean complete) {
+        while (true) {
+            // Display objects in backpack
+            prinText("\nChoose an object to use:");
+            int index = 1;
+            prinText("\n    0. Go back ");
+            for (Object obj : student.backpack) {
+                prinText("\n    " + index + ". " + obj.getName() + " ");
+                index++;
+            }
 
-        int choice = Integer.parseInt(scanner.nextLine());
-        if (choice < 0 || choice > student.backpack.size()) {
-            prinText("Invalid choice. Please enter a number between 0 and " + student.backpack.size());
-            useObject();
-        } else if (choice == 0) {
-            // Go back option selected, return to previous stage
-
-        } else {
-            Object selectedObject = student.backpack.get(choice - 1);
-            if (selectedObject.getName().equalsIgnoreCase("ID Card")) {
-                prinText("\nYou can't use the ID card here. Please pick another object.");
-                useObject();
-            } else if (selectedObject.getName().equalsIgnoreCase("Rock Paper Scissors")) {
-                playRockPaperScissors();
-            } else if (selectedObject.getName().equalsIgnoreCase("Uno Reverse")) {
-                student.gainExcuseLevel(100); // Enhance excuse level to max
-                prinText("\nYou used Uno Reverse. You pass freely!");
+            String choice = scanner.nextLine();
+            int input = checkInput(choice, 0, randomObjects.size());
+            if (input < 0 || input > student.backpack.size()) {
+                prinText("Invalid choice. Please enter a number between 0 and " + student.backpack.size());
+            } else if (input == 0) {
+                complete = false;
+                break;
             } else {
-                student.gainExcuseLevel(selectedObject.getExcuseBlocker());
-                prinText("\nYou used " + selectedObject.getName() + ". Your excuse level increased by "
-                        + selectedObject.getExcuseBlocker());
+                Object selectedObject = student.backpack.get(input - 1);
+                if (selectedObject.getName().equalsIgnoreCase("ID Card")) {
+                    prinText("\nYou can't use the ID card here. Please pick another object.");
+                    useObject(complete);
+                } else if (selectedObject.getName().equalsIgnoreCase("Rock Paper Scissors")) {
+                    playRockPaperScissors();
+                    complete = true;
+                } else if (selectedObject.getName().equalsIgnoreCase("Uno Reverse")) {
+                    student.gainExcuseLevel(100); // Enhance excuse level to max
+                    prinText("\nYou used Uno Reverse. You pass freely!");
+                    complete = true;
+                } else {
+                    student.gainExcuseLevel(selectedObject.getExcuseBlocker());
+                    prinText("\nYou used " + selectedObject.getName() + ". Your excuse level increased by "
+                            + selectedObject.getExcuseBlocker());
+                    complete = true;
+                }
             }
         }
     }
