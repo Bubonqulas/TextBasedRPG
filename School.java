@@ -14,10 +14,10 @@ public class School {
     static Student student;
     static Teacher entranceTeacher = new Teacher("Mrs. Pickering", 5, 1, 1);
     static Object iDcard = new Object("Id Card", 4);
-    static Object sickNote = new Object("Fake Sicknote", 6);
-    static Object rizz = new Object("rizz", 8);
-    static Object rockPaperScissors = new Object("Rock Paper Scissors", 10);
-    static Object unoReverse = new Object("Uno Reverse", 100);
+    static Object sickNote = new Object("Fake Sicknote", 4);
+    static Object rizz = new Object("rizz", 6);
+    static Object rockPaperScissors = new Object("Rock Paper Scissors", 0);
+    static Object unoReverse = new Object("Uno Reverse", 0);
     private static ArrayList<Object> randomObjects;
 
     public static void main(String[] args) {
@@ -48,46 +48,58 @@ public class School {
 
     public static void entranceEncounter() {
         Scanner scanner = new Scanner(System.in);
-        while (true) {
+        int input = 0;
+        while (input < 1 || input > 3) {
             prinText("\n\nWhat do you want to do?");
             prinText("\n    1. Make an excuse ");
             prinText("\n    2. Search for ID card in backpack ");
             prinText("\n    3. Run away ");
 
             String choice = scanner.nextLine();
-            int input = checkInput(choice, 1, 3);
-
-            switch (input) {
-                case 0:
-                    prinText("\nInvalid. Please enter a valid number between 1 to 3. ");
-
-                case 1:
-                    student.makeExcuse(entranceTeacher.getHealth(), entranceTeacher.getAttack(),
-                            entranceTeacher.getDefeatReward());
-
-                    break;
-                case 2:
-                    student.searchBackpack(entranceTeacher.getAttack(), entranceTeacher.getDefeatReward());
-                    break;
-                case 3:
-                    student.runStartAway();
-                    break;
+            input = checkInput(choice, 1, 3);
+            if (input == 1) {
+                student.makeExcuse(entranceTeacher);
+                break;
+            } else if (input == 2) {
+                student.searchBackpack(entranceTeacher);
+                break;
+            } else if (input == 3) {
+                student.runStartAway();
+                break;
+            } else if (input == 99) {
+                prinText("\nInvalid. Please enter a valid number between 1 to 3. ");
             }
-            break;
         }
-
         stageTwo();
-
     }
 
     public static void stageTwo() {
         prinText(
-                "\n\nYou successfully passed the entrance. You walk for a bit and then spot something on the floor.\nYou decide to walk towards what you think is an object.");
-        encounterObject();
-        prinText("\n\nYou continue walking and encounter a new teacher.");
-        Teacher newTeacher = new Teacher("Mr. Hager", 6, 2, 2);
+                "\n\nYou successfully passed the entrance. You walk for a bit and then spot something on the floor.\n Do you want to approach the object? (1. Yes, 2. No) ");
+        int objectInput = 0;
+        String choiceThree = scanner.nextLine();
+        objectInput = checkInput(choiceThree, 1, 2);
+        prinText("text     " + objectInput);
+        while (objectInput < 1 || objectInput > 2) {
+            prinText("text654    " + objectInput);
+            if (objectInput == 1) {
+                prinText("text444      " + objectInput);
+                encounterObject();
+                break;
+            } else if (objectInput == 99) {
+                prinText("\nInvalid. Please enter a valid number between 1 to 2. ");
+            }
+            prinText("text3      " + objectInput);
+
+        }
+        prinText("text2      " + objectInput);
+
+        Teacher newTeacher = new Teacher("Mr. Hager", 12, 2, 2);
+        prinText("\n\nYou continue walking and encounter " + newTeacher.getName() + ".");
+
         boolean complete = false;
-        while (true) {
+        int input = 0;
+        while (input < 1 || input > 3 || !complete) {
 
             prinText("\n\nWhat do you want to do?");
             prinText("\n    1. Make an excuse ");
@@ -95,29 +107,67 @@ public class School {
             prinText("\n    3. Run away ");
 
             String choiceTwo = scanner.nextLine();
-            int input = checkInput(choiceTwo, 1, 3);
-
-            switch (input) {
-                case 0:
-                    prinText("\nInvalid. Please enter a valid number between 1 to 3. ");
-                case 1:
-                    student.makeExcuse(newTeacher.getHealth(), newTeacher.getAttack(), newTeacher.getDefeatReward());
-                    break;
-                case 2:
-                    complete = useObject(complete);
-                    break;
-                case 3:
-                    student.runAway(2);
-                    break;
-            }
-            if (complete) {
+            input = checkInput(choiceTwo, 1, 3);
+            if (input == 1) {
+                student.makeExcuse(newTeacher);
                 break;
+            } else if (input == 2) {
+                complete = useObject(complete, newTeacher);
+            } else if (input == 3) {
+                student.runAway(newTeacher);
+                break;
+            } else if (input == 99) {
+                prinText("\nInvalid. Please enter a valid number between 1 to 3. ");
             }
+
+        }
+        encounterStaffConnector(newTeacher);
+    }
+
+    private static void encounterStaffConnector(Teacher prevteacher) {
+        prinText("\n\nYou successfully passed the previous encounter with " + prevteacher.getName()
+                + " and proceed further into the school building.");
+        prinText(
+                "\n\nAs you walk by the learning commons, you notice an open door to the staff connector.\nYou think you spot an object on the table. \nThere is a 70% chance you will get caught by another teacher but you go anyway.");
+        encounterObject();
+        Random rand = new Random();
+        int chance = rand.nextInt(100) + 1;
+        if (chance <= 70) {
+
+            prinText("\n\nAs you try to leave the connector, you hear footsteps approaching.");
+            Teacher staffTeacher = new Teacher("Mr. Mitchel", 13, 2, 2);
+            prinText("\nYou encounter " + staffTeacher.getName() + ".");
+            boolean complete = false;
+            int input = 0;
+            while (input < 1 || input > 2 || !complete) {
+                prinText("\n\nWhat do you want to do?");
+                prinText("\n    1. Make an excuse ");
+                prinText("\n    2. Use an object");
+                prinText("\n    3. Run away ");
+
+                String choiceThree = scanner.nextLine();
+                input = checkInput(choiceThree, 1, 3);
+                if (input == 1) {
+                    student.makeExcuse(staffTeacher);
+                    break;
+                } else if (input == 2) {
+                    prinText("\nYou decide to use an object.");
+                    complete = useObject(complete, staffTeacher);
+                } else if (input == 3) {
+                    student.runAway(staffTeacher);
+                    break;
+                } else if (input == 99) {
+                    prinText("\nInvalid. Please enter a valid number between 1 to 3. ");
+                }
+            }
+        } else {
+            prinText("\n\nYou cautiously peek around and exit before you get caught.");
         }
     }
 
-    public static boolean useObject(boolean complete) {
+    public static boolean useObject(boolean complete, Teacher teacher) {
         while (true) {
+            boolean secondComplete = false;
             // Display objects in backpack
             prinText("\nChoose an object to use:");
             int index = 1;
@@ -129,31 +179,39 @@ public class School {
 
             String choiceTwo = scanner.nextLine();
             int inputTwo = checkInput(choiceTwo, 0, randomObjects.size());
-            System.out.println(inputTwo);
-            if (inputTwo < 0 || inputTwo > student.backpack.size()) {
-                prinText("Invalid choice. Please enter a number between 0 and " + student.backpack.size());
-            } else if (inputTwo == 0) {
-                return false;
+            if (inputTwo == 0) {
+
+                complete = false;
+                secondComplete = true;
+
+            } else if (inputTwo == 99) {
+                prinText("\nInvalid choice. Please enter a valid number between 0 and " + student.backpack.size()
+                        + " or go back.");
             } else {
                 Object selectedObject = student.backpack.get(inputTwo - 1);
                 if (selectedObject.getName().equalsIgnoreCase("ID Card")) {
-                    prinText("\nYou can't use the ID card here. Please pick another object.");
-                    useObject(complete);
+                    prinText("\nYou can't use the ID card here. Please pick another object or go back.");
+
                 } else if (selectedObject.getName().equalsIgnoreCase("Rock Paper Scissors")) {
-                    playRockPaperScissors();
+                    Object.playRockPaperScissors(student, teacher);
                     complete = true;
                 } else if (selectedObject.getName().equalsIgnoreCase("Uno Reverse")) {
-                    student.gainExcuseLevel(100); // Enhance excuse level to max
-                    prinText("\nYou used Uno Reverse. You pass freely!");
+                    prinText("\n\nYou used the Uno Reverse card. You allowed to pass freely! ");
+                    prinText(teacher.getName() + " says");
+                    teacher.rudeRemarks();
                     complete = true;
                 } else {
                     student.gainExcuseLevel(selectedObject.getExcuseBlocker());
-                    prinText("\nYou used " + selectedObject.getName() + ". Your excuse level increased by "
+                    prinText("\n\nYou used " + selectedObject.getName() + ". Your excuse level increased by "
                             + selectedObject.getExcuseBlocker());
                     complete = true;
                 }
             }
+            if (complete || secondComplete) {
+                break;
+            }
         }
+        return complete;
     }
 
     private static void encounterObject() {
@@ -164,31 +222,12 @@ public class School {
             Object foundObject = randomObjects.get(index);
             randomObjects.remove(foundObject);
             student.addToBackpack(foundObject);
-            prinText("\nYou found " + foundObject.getName() + " on the floor!\nHere are "
+            prinText("\n\nYou found " + foundObject.getName() + "!\nHere are "
                     + "the stats of the object: ");
             foundObject.revealObject();
 
         } else {
-            prinText("\nYou were delusional and there was nothing on the floor.");
-        }
-    }
-
-    public static void playRockPaperScissors() {
-        prinText("\nYou chose to play Rock Paper Scissors.");
-        prinText("\nChoose your move (1. Rock, 2. Paper, 3. Scissors): ");
-        int playerMove = Integer.parseInt(scanner.nextLine());
-        int teacherMove = new Random().nextInt(3) + 1; // Random move for teacher (1 for Rock, 2 for Paper, 3 for
-                                                       // Scissors)
-
-        // Compare moves
-        if (playerMove == teacherMove) {
-            prinText("\nIt's a tie!");
-        } else if ((playerMove == 1 && teacherMove == 3) || (playerMove == 2 && teacherMove == 1)
-                || (playerMove == 3 && teacherMove == 2)) {
-            prinText("\nYou win! Your excuse level remains the same.");
-        } else {
-            student.gainExcuseLevel(10); // Enhance excuse level if student loses
-            prinText("\nYou lose! Your excuse level increased by 10.");
+            prinText("\n\nYou were delusional and there was nothing.");
         }
     }
 
@@ -200,11 +239,11 @@ public class School {
             if (number >= min && number <= max) {
                 return number;
             } else {
-                return 0;
+                return 99;
             }
         } catch (NumberFormatException e) {
             // Input is not an integer
-            return 0;
+            return 99;
         }
     }
 
@@ -217,7 +256,7 @@ public class School {
         for (int i = 0; i < text.length(); i++) {
             System.out.print(text.charAt(i));
             try {
-                Thread.sleep(60);
+                Thread.sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

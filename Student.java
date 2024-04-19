@@ -49,16 +49,18 @@ public class Student {
         backpack.add(item);
     }
 
-    public void makeExcuse(int chanceNumber, int striken, int defeatReward) {
+    public void makeExcuse(Teacher teacher) {
         Random rand = new Random();
-        int chance = rand.nextInt(chanceNumber) + 1;
+        int chance = rand.nextInt(teacher.getHealth()) + 1;
         if (chance > getExcuseLevel()) {
-            loseStrkes(striken);
-            printText("\nYour excuse fails. You lose a " + striken + " strike. You have "
+            loseStrkes(teacher.getAttack());
+            printText("\nYour excuse fails. You lose a " + teacher.getAttack() + " strike. You have "
                     + getStrikes() + " strikes left.");
+            printText("\n" + teacher.getName() + " says");
+            teacher.rudeRemarks();
 
         } else if (chance < getExcuseLevel()) {
-            gainExcuseLevel(defeatReward);
+            gainExcuseLevel(teacher.getDefeatReward());
             printText("\nYour excuse works! You're allowed to continue. Additionaly your excuse level increased to "
                     + getExcuseLevel());
 
@@ -75,17 +77,19 @@ public class Student {
         return false;
     }
 
-    public void searchBackpack(int attack, int defeatReward) {
+    public void searchBackpack(Teacher teacher) {
         if (checkBackpack("ID Card")) {
-            gainExcuseLevel(defeatReward);
+            gainExcuseLevel(teacher.getDefeatReward());
             printText(
                     "\nYou found your ID card! You're allowed to continue. Additionaly your excuse level increased to "
                             + getExcuseLevel());
 
         } else {
-            loseStrkes(attack);
-            printText("You couldn't find your ID card. You lose " + attack + " strike. You have "
+            loseStrkes(teacher.getAttack());
+            printText("You couldn't find your ID card. You lose " + teacher.getAttack() + " strike. You have "
                     + getStrikes() + " strikes left.");
+            printText("\n" + teacher.getName() + " says");
+            teacher.rudeRemarks();
 
         }
 
@@ -97,9 +101,11 @@ public class Student {
 
     }
 
-    public void runAway(int strikesL) {
-        printText("\nYour decide to run away. You lose " + strikesL + " strikes.");
-        loseStrkes(strikesL);
+    public void runAway(Teacher teacher) {
+        printText("\nYour decide to run away. You lose " + teacher.getAttack() + " strikes.");
+        loseStrkes(teacher.getAttack());
+        printText("\n" + teacher.getName() + " says");
+        teacher.rudeRemarks();
 
     }
 
