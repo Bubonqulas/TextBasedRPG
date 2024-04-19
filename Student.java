@@ -108,13 +108,13 @@ public class Student {
             loseStrkes(teacher.getAttack());
             printText("\nYour excuse fails. You lose a " + teacher.getAttack() + " strike. You have "
                     + getStrikes() + " strikes left.");
-            printText("\n" + teacher.getName() + " says");
+            printText("\n" + teacher.getName() + " sounds pissed and says");
             teacher.rudeRemarks();
 
         } else if (chance < getExcuseLevel()) {
             gainExcuseLevel(teacher.getDefeatReward());
             printText("\nYour excuse works! You're allowed to continue. Additionaly your excuse level increased to "
-                    + getExcuseLevel());
+                    + getExcuseLevel() + ".");
 
         }
 
@@ -145,7 +145,7 @@ public class Student {
             gainExcuseLevel(teacher.getDefeatReward());
             printText(
                     "\nYou found your ID card! You're allowed to continue. Additionaly your excuse level increased to "
-                            + getExcuseLevel());
+                            + getExcuseLevel() + ".");
 
         } else {
             loseStrkes(teacher.getAttack());

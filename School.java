@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class School {
     static Scanner scanner = new Scanner(System.in);
     static Student student;
-    static Teacher entranceTeacher = new Teacher("Mrs. Pickering", 5, 1, 1);
+    static Teacher entranceTeacher = new Teacher("Mrs. Pickering", 6, 1, 1);
     static Object iDcard = new Object("Id Card", 4);
     static Object sickNote = new Object("Fake Sicknote", 4);
     static Object rizz = new Object("Rizz", 6);
@@ -53,7 +53,10 @@ public class School {
         student = new Student(playerName);
         student.addToBackpack(iDcard);
         prinText("Hello " + playerName + ". Here are your current stats:\n Strikes: " + student.getStrikes()
-                + "\n Excuse level: " + student.getExcuseLevel() + "\n Objects: " + iDcard.getName());
+                + "\n Excuse level: " + student.getExcuseLevel() + "\n Objects: ");
+        for (Object obj : student.backpack) {
+            prinText(obj.getName() + "\n    ~");
+        }
         prinText(
                 "\n\nYou are running late to school. Your goal is to get to class on time without losing all your strikes.");
         prinText("\nYou walk to the entrance and encounter " + entranceTeacher.getName()
@@ -71,7 +74,8 @@ public class School {
         int input = 0;
         while (input < 1 || input > 3) {
             prinText("\n\nWhat do you want to do?");
-            prinText("\n    1. Make an excuse ");
+            prinText("\n    1. Make an excuse (" + entranceTeacher.getName() + " excuse blocker: "
+                    + entranceTeacher.getHealth() + ")");
             prinText("\n    2. Search for ID card in backpack ");
             prinText("\n    3. Run away ");
 
@@ -111,7 +115,7 @@ public class School {
             }
         }
 
-        Teacher newTeacher = new Teacher("Mr. Hager", 12, 2, 2);
+        Teacher newTeacher = new Teacher("Mr. Hager", 14, 2, 2);
         prinText("\n\nYou continue walking and encounter " + newTeacher.getName() + ".");
 
         boolean complete = false;
@@ -119,7 +123,8 @@ public class School {
         while (input < 1 || input > 3 || !complete) {
 
             prinText("\n\nWhat do you want to do?");
-            prinText("\n    1. Make an excuse ");
+            prinText("\n    1. Make an excuse (" + newTeacher.getName() + " excuse blocker: " + newTeacher.getHealth()
+                    + ")");
             prinText("\n    2. Use an Object ");
             prinText("\n    3. Run away ");
 
@@ -159,13 +164,14 @@ public class School {
         if (chance <= 70) {
 
             prinText("\n\nAs you try to leave the connector, you hear footsteps approaching.");
-            Teacher staffTeacher = new Teacher("Mr. Mitchel", 13, 2, 2);
+            Teacher staffTeacher = new Teacher("Mr. Mitchell", 16, 2, 2);
             prinText("\nYou encounter " + staffTeacher.getName() + ".");
             boolean complete = false;
             int input = 0;
             while (input < 1 || input > 2 || !complete) {
                 prinText("\n\nWhat do you want to do?");
-                prinText("\n    1. Make an excuse ");
+                prinText("\n    1. Make an excuse (" + staffTeacher.getName() + " excuse blocker: "
+                        + staffTeacher.getHealth() + ")");
                 prinText("\n    2. Use an object");
                 prinText("\n    3. Run away ");
 
@@ -210,7 +216,7 @@ public class School {
                 prinText("\nInvalid. Please enter a valid number between 1 and 2. ");
             }
         }
-        Teacher mrCard = new Teacher("Mr. Card", 20, 2, 3);
+        Teacher mrCard = new Teacher("Mr. Card", 20, 4, 2);
 
         prinText("\n\nYou see your classroom door in the distance and continue sprinting towards it. Suddenly, a wild "
                 + mrCard.getName() + " appears!");
@@ -218,7 +224,7 @@ public class School {
         boolean complete = false;
         while (!complete) {
             prinText("\n\nWhat do you want to do?");
-            prinText("\n    1. Make an excuse");
+            prinText("\n    1. Make an excuse(" + mrCard.getName() + " excuse blocker: " + mrCard.getHealth() + ")");
             prinText("\n    2. Use an Object");
             prinText("\n    3. Run away");
             prinText("\n    4. Listen to " + mrCard.getName() + " ");
@@ -287,34 +293,38 @@ public class School {
                 index++;
             }
 
-            String choiceTwo = scanner.nextLine();
-            int inputTwo = checkInput(choiceTwo, 0, randomObjects.size());
-            if (inputTwo == 0) {
+            String choiceFour = scanner.nextLine();
+            int inputFour = checkInput(choiceFour, 0, student.backpack.size());
+            prinText("size of backpack");
+            if (inputFour == 0) {
 
                 complete = false;
                 secondComplete = true;
 
-            } else if (inputTwo == 99) {
+            } else if (inputFour == 99) {
                 prinText("\nInvalid choice. Please enter a valid number between 0 and " + student.backpack.size()
                         + " or go back.");
             } else {
-                Object selectedObject = student.backpack.get(inputTwo - 1);
+                Object selectedObject = student.backpack.get(inputFour - 1);
                 if (selectedObject.getName().equalsIgnoreCase("ID Card")) {
                     prinText("\nYou can't use the ID card here. Please pick another object or go back.");
 
                 } else if (selectedObject.getName().equalsIgnoreCase("Rock Paper Scissors Duel")) {
                     Object.playRockPaperScissors(student, teacher);
+                    student.backpack.remove(rockPaperScissors);
                     complete = true;
                 } else if (selectedObject.getName().equalsIgnoreCase("Uno Reverse Card")) {
                     prinText("\n\nYou used the Uno Reverse card. You were allowed to pass freely! ");
                     prinText(teacher.getName() + " says");
                     teacher.rudeRemarks();
+                    student.backpack.remove(unoReverse);
                     complete = true;
                 } else {
                     student.gainExcuseLevel(selectedObject.getExcuseBlocker());
                     prinText("\n\nYou used " + selectedObject.getName() + " on " + teacher.getName()
-                            + ". Your allowed to continue your excuse level increased by "
+                            + ". Your allowed to continue. Your excuse level increased by "
                             + selectedObject.getExcuseBlocker());
+                    student.backpack.remove(selectedObject);
                     complete = true;
                 }
             }
